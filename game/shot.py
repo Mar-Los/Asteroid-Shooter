@@ -1,7 +1,7 @@
 from turtle import Turtle, Vec2D
-from config import Config
-from asteroid import Asteroid
 from math import sqrt
+from app_config import AppConfig
+from .asteroid import Asteroid
 
 
 class Shot(Turtle):
@@ -9,8 +9,8 @@ class Shot(Turtle):
 
     def __init__(self):
         super().__init__()
-        self.speed(Config.SHOT_SPEED)
-        self.pencolor(Config.SHOT_COLOR)
+        self.speed(0)
+        self.pencolor(AppConfig.SHOT_COLOR)
 
     def set_location(self, player_position: Vec2D, player_heading: Vec2D):
         self.penup()

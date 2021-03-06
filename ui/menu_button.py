@@ -1,5 +1,5 @@
 from turtle import Turtle
-from config import Config
+from app_config import AppConfig
 
 
 class MenuButton(Turtle):
@@ -16,25 +16,25 @@ class MenuButton(Turtle):
     def draw(self):
         self.setpos(self.start_pos)
         if self.selected:
-            self.fillcolor(Config.SELECTED_BUTTON_COLOR)
+            self.fillcolor(AppConfig.SELECTED_BUTTON_COLOR)
         else:
-            self.fillcolor(Config.BUTTON_COLOR)
+            self.fillcolor(AppConfig.BUTTON_COLOR)
         self.pendown()
         self.begin_fill()
         for i in range(2):
-            self.forward(Config.BUTTON_WIDTH)
+            self.forward(AppConfig.BUTTON_WIDTH)
             self.left(90)
-            self.forward(Config.BUTTON_HEIGHT)
+            self.forward(AppConfig.BUTTON_HEIGHT)
             self.left(90)
         self.end_fill()
         self.penup()
-        self.forward(Config.BUTTON_WIDTH / 2)
+        self.forward(AppConfig.BUTTON_WIDTH / 2)
         self.left(90)
-        self.forward(3 / 2 * Config.FONT_SIZE + Config.BUTTON_HEIGHT / 2)
-        self.color(Config.TEXT_COLOR)
+        self.forward(3 / 2 * AppConfig.FONT_SIZE + AppConfig.BUTTON_HEIGHT / 2)
+        self.color(AppConfig.TEXT_COLOR)
         self.write(self.title, align='center',
-                   font=(Config.FONT, Config.FONT_SIZE))
+                   font=(AppConfig.FONT, AppConfig.FONT_SIZE))
         self.penup()
-        self.color(Config.BUTTON_COLOR)
+        self.color(AppConfig.BUTTON_COLOR)
         self.setheading(0)
         self.setpos(self.start_pos)

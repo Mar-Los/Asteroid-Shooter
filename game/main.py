@@ -1,11 +1,12 @@
 from turtle import *
-from score import Score
-from config import Config
-from player import Player
-from shot import Shot
-from asteroid import Asteroid
-from end_screen import EndScreen
 from math import floor
+from .score import Score
+from user_config import UserConfig
+from app_config import AppConfig
+from .player import Player
+from .shot import Shot
+from .asteroid import Asteroid
+from ui.end_screen import EndScreen
 
 
 class Game:
@@ -21,14 +22,14 @@ class Game:
         try:
             asteroid_count = floor(numinput(
                 'Počet asteroidů', 'Zadej počet asteroidů',
-                minval=Config.MIN_ASTEROIDS,
-                maxval=Config.MAX_ASTEROIDS,
+                minval=UserConfig.MIN_ASTEROIDS,
+                maxval=UserConfig.MAX_ASTEROIDS,
                 default=floor(
-                    (Config.MIN_ASTEROIDS + Config.MAX_ASTEROIDS) / 2)
+                    (UserConfig.MIN_ASTEROIDS + UserConfig.MAX_ASTEROIDS) / 2)
             ))
         except TypeError:
             asteroid_count = floor(
-                (Config.MIN_ASTEROIDS + Config.MAX_ASTEROIDS) / 2)
+                (UserConfig.MIN_ASTEROIDS + UserConfig.MAX_ASTEROIDS) / 2)
         self.draw_asteroids(asteroid_count)
         self.player = Player()
         self.bind_events()
@@ -45,21 +46,21 @@ class Game:
             self.move_shots()
 
     def move_player(self):
-        playerRadius = Config.PLAYER_SIZE * Config.PLAYER_SIZE_TO_HITBOX_RADIUS_RATIO
-        if self.player.xcor() - playerRadius > Config.GAME_WIDTH:
+        playerRadius = UserConfig.PLAYER_SIZE * AppConfig.PLAYER_SIZE_TO_HITBOX_RADIUS_RATIO
+        if self.player.xcor() - playerRadius > AppConfig.GAME_WIDTH:
             self.player.setpos(0, self.player.ycor())
         elif self.player.xcor() + playerRadius < 0:
-            self.player.setpos(Config.GAME_WIDTH, self.player.ycor())
-        elif self.player.ycor() - playerRadius > Config.GAME_HEIGHT:
+            self.player.setpos(AppConfig.GAME_WIDTH, self.player.ycor())
+        elif self.player.ycor() - playerRadius > AppConfig.GAME_HEIGHT:
             self.player.setpos(self.player.xcor(), 0)
         elif self.player.ycor() + playerRadius < 0:
-            self.player.setpos(self.player.xcor(), Config.GAME_HEIGHT)
-        self.player.forward(Config.PLAYER_SPEED)
+            self.player.setpos(self.player.xcor(), AppConfig.GAME_HEIGHT)
+        self.player.forward(UserConfig.PLAYER_SPEED)
 
     def move_shots(self):
         for shot in self.shots:
             if not shot.is_fired:
-                shot.forward(Config.SHOT_REACH)
+                shot.forward(UserConfig.SHOT_REACH)
                 shot.is_fired = True
                 for asteroid in self.asteroids:
                     intersection = shot.intersection_with_asteroid(asteroid)
@@ -68,11 +69,11 @@ class Game:
                     asteroid.clear()
                     self.asteroids.remove(asteroid)
                     if intersection == 'impaled':
-                        self.score += round(Config.IMPALE_SCORE * (1 /
-                                                                   asteroid.radius) * Config.ASTEROID_SIZE_SCORE_RATIO)
+                        self.score += round(AppConfig.IMPALE_SCORE * (1 /
+                                                                   asteroid.radius) * AppConfig.ASTEROID_SIZE_SCORE_RATIO)
                     elif intersection == 'poked':
-                        self.score += round(Config.POKE_SCORE * (1 / asteroid.radius)
-                                            * Config.ASTEROID_SIZE_SCORE_RATIO)
+                        self.score += round(AppConfig.POKE_SCORE * (1 / asteroid.radius)
+                                            * AppConfig.ASTEROID_SIZE_SCORE_RATIO)
                     self.score_bar.update(self.score)
                     del asteroid
 

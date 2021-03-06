@@ -1,8 +1,8 @@
 from turtle import onkey, listen, done
-from config import Config
-from menu_button import MenuButton
-from settings import Settings
-from game import Game
+from app_config import AppConfig
+from .menu_button import MenuButton
+from .settings import Settings
+from game.main import Game
 
 
 class Menu:
@@ -11,11 +11,11 @@ class Menu:
     def draw(self):
         self.buttons.append(MenuButton('Hrát', self.start_game, selected=True))
         self.buttons.append(MenuButton('Nastavení', self.show_settings))
-        menu_start_y = (Config.GAME_HEIGHT - len(self.buttons) *
-                        (Config.BUTTON_HEIGHT + Config.BUTTON_MARGIN) - Config.BUTTON_MARGIN) / 2
+        menu_start_y = (AppConfig.GAME_HEIGHT - len(self.buttons) *
+                        (AppConfig.BUTTON_HEIGHT + AppConfig.BUTTON_MARGIN) - AppConfig.BUTTON_MARGIN) / 2
         for i in range(len(self.buttons)):
-            self.buttons[i].start_pos = Config.GAME_WIDTH / 2 - Config.BUTTON_WIDTH / 2, menu_start_y + i * (
-                Config.BUTTON_HEIGHT + Config.BUTTON_MARGIN) - Config.BUTTON_MARGIN
+            self.buttons[i].start_pos = AppConfig.GAME_WIDTH / 2 - AppConfig.BUTTON_WIDTH / 2, menu_start_y + i * (
+                AppConfig.BUTTON_HEIGHT + AppConfig.BUTTON_MARGIN) - AppConfig.BUTTON_MARGIN
             self.buttons[i].draw()
         self.bind_events()
         done()
