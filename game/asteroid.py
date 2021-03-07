@@ -21,9 +21,9 @@ class Asteroid(Turtle):
             self.setpos(AppConfig.GAME_WIDTH - randint(self.radius, AppConfig.GAME_WIDTH),
                         AppConfig.GAME_HEIGHT - randint(self.radius, AppConfig.GAME_HEIGHT))
             x_in_center = self.xcor() >= (AppConfig.GAME_WIDTH - AppConfig.CENTER_AREA_WIDTH) / \
-                2 and self.xcor() <= (AppConfig.GAME_WIDTH + AppConfig.CENTER_AREA_WIDTH) / 2
+                2 - self.radius and self.xcor() <= (AppConfig.GAME_WIDTH + AppConfig.CENTER_AREA_WIDTH) / 2 + self.radius
             y_in_center = self.ycor() >= (AppConfig.GAME_HEIGHT - AppConfig.CENTER_AREA_HEIGHT) / \
-                2 and self.ycor() <= (AppConfig.GAME_HEIGHT + AppConfig.CENTER_AREA_HEIGHT) / 2
+                2 - self.radius and self.ycor() <= (AppConfig.GAME_HEIGHT + AppConfig.CENTER_AREA_HEIGHT) / 2 + self.radius
 
     def draw(self):
         self.penup()
