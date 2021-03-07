@@ -1,4 +1,5 @@
 from turtle import numinput, listen
+from re import sub
 from math import floor
 from app_config import AppConfig
 from user_config import UserConfig
@@ -12,29 +13,31 @@ class Settings:
 
     def draw(self):
         menu_center = (AppConfig.GAME_WIDTH / 2, AppConfig.GAME_HEIGHT / 2)
-        self.menu = Menu(menu_center, self.get_buttons(), is_vertical=True, exit_on_enter=False, button_width=AppConfig.BUTTON_WIDTH * 2)
+        self.buttons = self.get_buttons()
+        self.menu = Menu(menu_center, list(self.buttons.values()), is_vertical=True, exit_on_enter=False, button_width=AppConfig.BUTTON_WIDTH * 2)
         self.menu.draw()
 
     def get_buttons(self):
-        return [
-            MenuButton('Dosah střel: ' + str(UserConfig.SHOT_REACH), self.change_shot_reach, selected=True, width=AppConfig.BUTTON_WIDTH * 2),
-            MenuButton('Velikost hráče: ' + str(UserConfig.PLAYER_SIZE), self.change_player_size, width=AppConfig.BUTTON_WIDTH * 2),
-            MenuButton('Rychlost hráče: ' + str(UserConfig.PLAYER_SPEED), self.change_player_speed, width=AppConfig.BUTTON_WIDTH * 2),
-            MenuButton('Minimální velikost asteroidů: ' + str(UserConfig.ASTEROID_MIN_SIZE), self.change_asteroid_min_size, width=AppConfig.BUTTON_WIDTH * 2),
-            MenuButton('Maximální velikost asteroidů: ' + str(UserConfig.ASTEROID_MAX_SIZE), self.change_asteroid_max_size, width=AppConfig.BUTTON_WIDTH * 2),
-            MenuButton('Minimální počet asteroidů: ' + str(UserConfig.MIN_ASTEROIDS), self.change_min_asteroids, width=AppConfig.BUTTON_WIDTH * 2),
-            MenuButton('Maximální velikost asteroidů: ' + str(UserConfig.MAX_ASTEROIDS), self.change_max_asteroids, width=AppConfig.BUTTON_WIDTH * 2),
-            MenuButton('Zpět do menu', self.back_to_menu, width=AppConfig.BUTTON_WIDTH * 2)
-        ]
+        return {
+            'SHOT_REACH': MenuButton('Dosah střel: ' + str(UserConfig.SHOT_REACH), self.change_shot_reach, selected=True, width=AppConfig.BUTTON_WIDTH * 2),
+            'PLAYER_SIZE': MenuButton('Velikost hráče: ' + str(UserConfig.PLAYER_SIZE), self.change_player_size, width=AppConfig.BUTTON_WIDTH * 2),
+            'PLAYER_SPEED': MenuButton('Rychlost hráče: ' + str(UserConfig.PLAYER_SPEED), self.change_player_speed, width=AppConfig.BUTTON_WIDTH * 2),
+            'ASTEROID_MIN_SIZE': MenuButton('Minimální velikost asteroidů: ' + str(UserConfig.ASTEROID_MIN_SIZE), self.change_asteroid_min_size, width=AppConfig.BUTTON_WIDTH * 2),
+            'ASTEROID_MAX_SIZE': MenuButton('Maximální velikost asteroidů: ' + str(UserConfig.ASTEROID_MAX_SIZE), self.change_asteroid_max_size, width=AppConfig.BUTTON_WIDTH * 2),
+            'MIN_ASTEROID': MenuButton('Minimální počet asteroidů: ' + str(UserConfig.MIN_ASTEROIDS), self.change_min_asteroids, width=AppConfig.BUTTON_WIDTH * 2),
+            'MAX_ASTEROIDS': MenuButton('Maximální velikost asteroidů: ' + str(UserConfig.MAX_ASTEROIDS), self.change_max_asteroids, width=AppConfig.BUTTON_WIDTH * 2),
+            'back': MenuButton('Zpět do menu', self.back_to_menu, width=AppConfig.BUTTON_WIDTH * 2)
+        }
 
     def back_to_menu(self):
         self.menu.clear()
         self.back_to_menu_fun()
 
-    def update_menu(self):
-        self.menu.clear()
-        self.menu.buttons = self.get_buttons()
-        self.menu.draw()
+    def update_btn(self, setting_name: str):
+        old_title = self.buttons[setting_name].title
+        new_title = sub('\d+', str(getattr(UserConfig, setting_name)), old_title)
+        self.buttons[setting_name].title = new_title
+        self.buttons[setting_name].draw()
         self.menu.bind_events()
 
     def change_user_setting(self, setting_name: str, title: str, prompt: str, min_value: int, max_value: int):
@@ -43,9 +46,9 @@ class Settings:
                 title, prompt, int((min_value + max_value) / 2), min_value, max_value
             ))
             setattr(UserConfig, setting_name, newValue)
-            self.update_menu()
-        except:
-            pass
+            self.update_btn(setting_name)
+        except TypeError:
+            self.menu.bind_events()
 
     def change_shot_reach(self):
         self.change_user_setting('SHOT_REACH', 'Dosah střel', 'Zadej dosah střel', 100, 1000)
