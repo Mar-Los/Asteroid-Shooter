@@ -120,14 +120,17 @@ class Game:
     def end(self, won: bool):
         self.remove_events()
         self.reset()
+        if won:
+            continue_btn_text = 'Pokračovat'
+        else:
+            continue_btn_text = 'Hrát znovu'
         buttons = [
-            MenuButton('Pokračovat', self.start_again, selected=True),
+            MenuButton(continue_btn_text, self.start_again, selected=True),
             MenuButton('Zpět do menu', self.back_to_menu)
         ]
         self.end_screen = EndScreen(self.score, buttons)
+        if not won: self.score = 0
         self.end_screen.draw()
-        if not won:
-            self.score = 0
 
     def back_to_menu(self):
         self.end_screen.clear()
