@@ -1,4 +1,4 @@
-class UserConfig:
+class UserConfig(object):
     SHOT_REACH = 600
     PLAYER_SIZE = 10
     PLAYER_SPEED = 4

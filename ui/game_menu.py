@@ -18,7 +18,8 @@ class GameMenu:
         menu.draw()
 
     def show_settings(self):
-        pass
+        settings = Settings(self.draw)
+        settings.draw()
 
     def start_game(self):
         game = Game(self.draw)
