@@ -1,4 +1,4 @@
-from turtle import onkey, listen, done
+from turtle import bye
 from app_config import AppConfig
 from .menu_button import MenuButton
 from .settings import Settings
@@ -11,7 +11,8 @@ class GameMenu:
     def draw(self):
         buttons = [
             MenuButton('Hrát', self.start_game, selected=True),
-            MenuButton('Nastavení', self.show_settings)
+            MenuButton('Nastavení', self.show_settings),
+            MenuButton('Konec', self.quit_game)
         ]
         menu_center = (AppConfig.GAME_WIDTH / 2, AppConfig.GAME_HEIGHT / 2)
         menu = Menu(menu_center, buttons, is_vertical=True)
@@ -24,3 +25,6 @@ class GameMenu:
     def start_game(self):
         game = Game(self.draw)
         game.start_game()
+
+    def quit_game(self):
+        bye()
