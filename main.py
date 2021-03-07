@@ -1,4 +1,4 @@
-from ui.menu import Menu
+from ui.game_menu import GameMenu
 from app_config import AppConfig
 from turtle import *
 
@@ -11,7 +11,7 @@ def setup_window():
 
 def main():
     setup_window()
-    menu = Menu()
+    menu = GameMenu()
     menu.draw()
 
 
