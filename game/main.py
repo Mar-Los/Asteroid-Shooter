@@ -7,6 +7,7 @@ from .player import Player
 from .shot import Shot
 from .asteroid import Asteroid
 from ui.end_screen import EndScreen
+from ui.menu_button import MenuButton
 
 
 class Game:
@@ -119,8 +120,21 @@ class Game:
     def end(self, won: bool):
         self.remove_events()
         self.reset()
+        buttons = [
+            MenuButton('Pokračovat', self.start_again, selected=True),
+            MenuButton('Zpět do menu', self.back_to_menu)
+        ]
+        self.end_screen = EndScreen(self.score, buttons)
+        self.end_screen.draw()
         if not won:
             self.score = 0
-        end_screen = EndScreen()
-        end_screen.draw(won)
-        onkey(self.start_game, 'Return')
+
+    def back_to_menu(self):
+        self.end_screen.clear()
+        self.score_bar.clear()
+        self.back_to_menu_fun()
+
+    def start_again(self):
+        self.end_screen.clear()
+        self.score_bar.clear()
+        self.start_game()
